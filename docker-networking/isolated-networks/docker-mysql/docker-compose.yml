@@ -1,0 +1,20 @@
+name: mysql-server
+services:
+  db:
+    image: mysql:8.0.35
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DB: pass
+    ports:
+      - 3306:3306
+    networks:
+      - mysql
+    volumes:
+      - ./db/data:/var/lib/mysql
+
+networks:
+  mysql:
+    name: mysql
+    driver: bridge

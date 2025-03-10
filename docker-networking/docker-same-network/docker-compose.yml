@@ -1,0 +1,32 @@
+name: phpmyadmin-mysql
+services:
+  db:
+    image: mysql:8.0.41-debian
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DB: pass
+    ports:
+      - 3306:3306
+    networks:
+      - phpmyadmin-mysql
+    volumes:
+      - ./db/data:/var/lib/mysql
+      # - ./db/dump/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  adminer:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=db
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - phpmyadmin-mysql
+
+networks:
+  phpmyadmin-mysql:
+    name: phpmyadmin-mysql
+    driver: bridge

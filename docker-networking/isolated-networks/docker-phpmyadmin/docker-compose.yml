@@ -1,0 +1,17 @@
+name: phpmyadmin
+services:
+  adminer:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=db
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - phpmyadmin
+
+networks:
+  phpmyadmin:
+    name: phpmyadmin
+    driver: bridge

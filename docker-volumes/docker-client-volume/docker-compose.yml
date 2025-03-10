@@ -1,0 +1,16 @@
+services:
+  my-service:
+    image: my_image
+    volumes:
+      - my-s3-volume:/app/data
+    ports:
+      - "8080:8080"
+
+# Volume for S3
+volumes:
+  my-s3-volume:
+    driver: rexray/s3fs
+    driver_opts:
+      accessKey: your_access_key
+      secretKey: your_secret_key
+      region: your_region

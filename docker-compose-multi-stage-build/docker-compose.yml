@@ -1,0 +1,39 @@
+name: test-docker-compose
+
+networks:
+  my-custom-network:
+    name: my-custom-network
+    driver: bridge
+services:
+  api:
+    container_name: local-api
+    image: my-local-api:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+      args:
+        GITHUB_USERNAME: ${GITHUB_USERNAME}
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        conditions: service_started
+    command: ["sh", "-c", "node ./dist/src/index.js"]
+    ports:
+      - "4001:3000"
+    networks:
+      - my-custom-network
+
+  redis:
+    image: redis:alpine
+    env_file:
+      - .env
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+      - GITHUB_USERNAME=${GITHUB_USERNAME}
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - my-custom-network

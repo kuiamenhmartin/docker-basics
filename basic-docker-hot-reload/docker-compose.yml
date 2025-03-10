@@ -1,0 +1,28 @@
+services:
+  backend:
+    # Build the image using the Dockerfile in the current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Set the container name to backend when container started(optional)
+    container_name: backend
+    environment:
+      # Set the environment variable to use polling for hot reload
+      # This is node specific env vairable and is required for hot reload to work
+      # Put all of the environment variables here
+      - CHOKIDAR_USEPOLLING=true
+    # Run the container with the specified command and arguments and start the server
+    #command: npm start
+    # Automatically restart the container if it exits or stops
+    # This is important for hot reload to work
+    restart: always
+    volumes:
+      # Mount the current directory to the container  /app
+      # This will allow the container to see the changes in the local files
+      # and restart the server automatically when a change is detected (hot reload)
+      # 
+      - ./:/app
+    ports:
+      # Map the container port 3000 to the host port 8080 (host port:container port)
+      # This will allow the host to access the server running in the container (localhost:8080)
+      - 8080:3000
